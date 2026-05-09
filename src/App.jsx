@@ -7,22 +7,29 @@ import { Debts } from './views/Debts';
 import { Investments } from './views/Investments';
 import { Insights } from './views/Insights';
 import { Settings } from './views/Settings';
+import { useFinanceStore } from './store/financeStore';
+import { useLocale } from './hooks/useLocale';
 
 export default function App() {
+  const { settings } = useFinanceStore();
+  const locale = useLocale(settings.language);
+  
   return (
     <BrowserRouter>
-      <div className="min-h-screen pb-20">
+      {/* Konten utama dengan padding bawah agar tidak tertutup nav */}
+      <div className="min-h-screen pb-24">
         <Routes>
-          <Route path="/" element={<Dashboard />} />
-          <Route path="/transactions" element={<Transactions />} />
-          <Route path="/budgets" element={<Budgets />} />
-          <Route path="/debts" element={<Debts />} />
-          <Route path="/investments" element={<Investments />} />
-          <Route path="/insights" element={<Insights />} />
-          <Route path="/settings" element={<Settings />} />
+          <Route path="/" element={<Dashboard locale={locale} />} />
+          <Route path="/transactions" element={<Transactions locale={locale} />} />
+          <Route path="/budgets" element={<Budgets locale={locale} />} />
+          <Route path="/debts" element={<Debts locale={locale} />} />
+          <Route path="/investments" element={<Investments locale={locale} />} />
+          <Route path="/insights" element={<Insights locale={locale} />} />
+          <Route path="/settings" element={<Settings locale={locale} />} />
         </Routes>
       </div>
-      <TabNav />
+      {/* Navbar di luar wrapper konten - pasti fixed ke viewport */}
+      <TabNav locale={locale} />
     </BrowserRouter>
   );
 }
